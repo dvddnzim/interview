@@ -13,12 +13,14 @@ public class Luhn {
 	 * 
 	 * @param cardNumber
 	 *            the card number
+         *            Card numbers are generally 16 digits, so this needs to be a long
 	 * 
 	 * @return true if the card number is valid according to the Luhn algorithm,
 	 *         false if not
 	 */
-	public boolean isValidLuhn(int cardNumber) {
-		return false;
+	public boolean isValidLuhn(long cardNumber) {
+                // Just ensure that the GCD matches the last digit.
+		return (this.generateCheckDigit(cardNumber / 10) == (cardNumber % 10));
 	}
 
 	/**

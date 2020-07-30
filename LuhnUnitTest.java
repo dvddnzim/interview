@@ -33,6 +33,19 @@ public class LuhnUnitTest {
 		assertFalse(luhn.isValidLuhn(927398717));
 		assertFalse(luhn.isValidLuhn(927398718));
 		assertTrue(luhn.isValidLuhn(927398719));
+
+                // Check these randomly generated valid nums.
+		assertTrue(luhn.isValidLuhn(3666141787L));
+		assertTrue(luhn.isValidLuhn(9056473144L));
+		assertTrue(luhn.isValidLuhn(8686769939L));
+		assertTrue(luhn.isValidLuhn(1675391054L));
+
+                // Modify the valid nums slightly and make
+                // sure they are no longer valid.
+		assertFalse(luhn.isValidLuhn(3666141788L));
+		assertFalse(luhn.isValidLuhn(9056473145L));
+		assertFalse(luhn.isValidLuhn(8686769938L));
+		assertFalse(luhn.isValidLuhn(1675391055L));
 	}
 
 	@Test
