@@ -1,9 +1,14 @@
 package com.hps.luhn;
 
+import java.math.BigInteger;
+
 /**
  * @see https://en.wikipedia.org/wiki/Luhn_algorithm#Description
  */
 public class Luhn {
+
+        private static final BigInteger BIG1  = new BigInteger("1");
+        private static final BigInteger BIG10 = new BigInteger("10");
 
 	/**
 	 * TODO
@@ -13,14 +18,14 @@ public class Luhn {
 	 * 
 	 * @param cardNumber
 	 *            the card number
-         *            Card numbers are generally 16 digits, so this needs to be a long
+         *            Card numbers are generally 16 digits, so this needs to be a BigInteger.
 	 * 
 	 * @return true if the card number is valid according to the Luhn algorithm,
 	 *         false if not
 	 */
-	public boolean isValidLuhn(long cardNumber) {
+	public boolean isValidLuhn(BigInteger cardNumber) {
                 // Just ensure that the GCD matches the last digit.
-		return (this.generateCheckDigit(cardNumber / 10) == (cardNumber % 10));
+		return (cardNumber.mod(BIG10).intValue() == this.generateCheckDigit(cardNumber.divide(BIG10)));
 	}
 
 	/**
@@ -29,16 +34,16 @@ public class Luhn {
 	 * 
 	 * @param cardNumber
 	 *            the card number (not including a check digit)
-         *            Card numbers are generally 16 digits, so this needs to be a long
+         *            Card numbers are generally 16 digits, so this needs to be a BigInteger.
 	 * 
 	 * @return the check digit
 	 */
-	public int generateCheckDigit(long cardNumber) {
+	public int generateCheckDigit(BigInteger cardNumber) {
 		boolean doubleDigit = true;
 		int sum = 0;
-		while (cardNumber > 0) {
+		while (cardNumber.compareTo(BigInteger.ZERO) > 0) {
 			// starting from the right (rightmost is the unknown check digit)
-			long digit = cardNumber % 10; 
+			int digit = cardNumber.mod(BIG10).intValue(); 
 
 			if (doubleDigit) { // double the value of every second digit
 				digit *= 2;
@@ -53,7 +58,7 @@ public class Luhn {
 
 			sum += digit;
 
-			cardNumber /= 10; // remaining digits to the left
+			cardNumber = cardNumber.divide(BIG10); // remaining digits to the left
 		}
 
 		return sum * 9 % 10;
@@ -73,13 +78,13 @@ public class Luhn {
          *                   valid, what are we supposed to do? Return an error?
 	 * @param endRange
 	 *            the ending card number of the range (may not be a valid luhn)
-         *            Card numbers are generally 16 digits, so these need to be a long
+         *            Card numbers are generally 16 digits, so these need to be a BigInteger.
 	 * 
 	 * @return the number of valid Luhn card numbers in the range, inclusive
 	 */
-	public int countRange(long startRange, long endRange) {
+	public int countRange(BigInteger startRange, BigInteger endRange) {
                 int numValid = 0;
-                for (long l = startRange; l <= endRange; l++)
+                for (BigInteger l = startRange; l.compareTo(endRange) <= 0; l = l.add(BIG1))
                 {
                   if (this.isValidLuhn(l))
                   {
